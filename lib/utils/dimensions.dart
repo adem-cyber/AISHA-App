@@ -29,7 +29,7 @@ static double radius15 = screenHeight/56.27;
 static double radius20= screenHeight/42.2;
 static double radius30= screenHeight/28.13;
 
-static double iconSize25= screenHeight/35.17;
+static double iconSize24= screenHeight/35.17;
 static double iconSize16= screenHeight/52.75;
 
 
@@ -44,4 +44,5 @@ static double PopularFoodImgSize = screenHeight/2.41;
 //bottom height
 static double bottomHeightbar = screenHeight/7.03;
 
+static double splashImg = screenHeight/3.38;
 }

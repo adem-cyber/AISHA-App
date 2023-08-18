@@ -18,6 +18,7 @@ class _MainFoodPageState extends State< MainFoodPage> {
   Widget build(BuildContext context) {
     
     return Scaffold(
+      backgroundColor:const Color.fromARGB(255, 255, 255, 255),
       body: Column(
         children:[
            Container(
@@ -51,17 +52,17 @@ class _MainFoodPageState extends State< MainFoodPage> {
                   color: AppColors.mainColor, 
 
                 ),
-                child:  Icon(Icons.search,color:Colors.white, size: Dimensions.iconSize25 ),
+                child:  Icon(Icons.search,color:Colors.white, size: Dimensions.iconSize24 ),
               )
               ),
             ],
           ),
         ),
            ),
-          const Expanded(child: SingleChildScrollView(
-            child:FoodPageBody()
-           ,)
-          ),
+        const Expanded(child: SingleChildScrollView(
+           child:FoodPageBody()
+         ,)
+         )
         ],
       ),
     

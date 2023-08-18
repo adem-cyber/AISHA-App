@@ -81,11 +81,11 @@ class RecommenededFoodDetail extends StatelessWidget {
          child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              AppIcon(iconColor: Colors.white,  backgroundColor: AppColors.mainColor, icon: Icons.remove, size: Dimensions.iconSize25, ),
+              AppIcon(iconColor: Colors.white,  backgroundColor: AppColors.mainColor, icon: Icons.remove, size: Dimensions.iconSize24, ),
               SizedBox(width: Dimensions.width10,),
-               BigText(text: "\$12.88 "+" X "+" 0 ",color: AppColors.mainBlackcolor,size: Dimensions.font16,),
+               BigText(text: "\$12.88  X  0 ",color: AppColors.mainBlackcolor,size: Dimensions.font16,),
                SizedBox(width: Dimensions.width10,),
-              AppIcon(iconColor: Colors.white,  backgroundColor: AppColors.mainColor, size: Dimensions.iconSize25, icon: Icons.add,),
+              AppIcon(iconColor: Colors.white,  backgroundColor: AppColors.mainColor, size: Dimensions.iconSize24, icon: Icons.add,),
              
        
             ],

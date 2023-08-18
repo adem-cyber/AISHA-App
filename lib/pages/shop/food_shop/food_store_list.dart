@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/routes/route_helper.dart';
+import 'package:flutter_application_1/model/products_model.dart';
+import 'package:flutter_application_1/pages/cart/cart_page.dart';
+import 'package:flutter_application_1/pages/shop/food_shop/food_shop_page.dart';
+
+
 import 'package:flutter_application_1/utils/colors.dart';
 import 'package:flutter_application_1/widgets/app_icon.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
+
+import '../../../controller/cart_controller.dart';
+import '../../../data/repository/products_repo.dart';
 import '../../../utils/dimensions.dart';
 import '../../../widgets/big_text.dart';
-import '../../../widgets/exandable_taxt_widget.dart';
-import '../../../widgets/icon_and_text.dart';
 import '../../../widgets/small_text.dart';
-import '../../home/main_food_page.dart';
 
 class FoodStoreList extends StatelessWidget {
-  const FoodStoreList ({super.key});
+  
+   const FoodStoreList ({super.key});
+
+  
+   
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(ProductsRepo());
+    final cart= Get.put(CartController());
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
@@ -29,13 +38,18 @@ class FoodStoreList extends StatelessWidget {
               children: [
                  GestureDetector(
                     onTap: () {
-                      Get.toNamed(RouteHelper.getfoodShop());
+                      Get.to(()=>const FoodShopPage());
                     },
                     child:
                       const AppIcon(icon: Icons.arrow_back_ios_new_sharp)),
                 
                 
-                AppIcon(icon: Icons.shopping_cart),
+                 GestureDetector(
+                    onTap: () {
+                      Get.to(()=>CartPage());
+                    },
+                    child:
+                      const AppIcon(icon: Icons.shopping_cart_outlined)),
 
               ],
             ),
@@ -60,7 +74,9 @@ class FoodStoreList extends StatelessWidget {
             backgroundColor: AppColors.yellowcolor,
             expandedHeight: 300,
             flexibleSpace: FlexibleSpaceBar(
-              background:Image.asset("assets/images/store1.jpeg",width: double.maxFinite,fit: BoxFit.cover,),
+              background:Image.asset("assets/images/store1.jpeg",
+              width: double.maxFinite,
+              fit: BoxFit.cover,),
               
 
              ),
@@ -70,171 +86,135 @@ class FoodStoreList extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                   child: ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-    itemCount: 10,
-    itemBuilder: (context, index) {
-      return GestureDetector(
-        onTap: () {
-                Get.toNamed(RouteHelper.getfoodDetail(index),);
-        },
-        child: Container(
-          margin: EdgeInsets.only(left: Dimensions.width20, right: Dimensions.width20, bottom:  Dimensions.height10),
-          child: Row(
-            children: [
-              Container(
-                width: Dimensions.ListViewImgSize,
-                height: Dimensions.ListViewImgSize,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(Dimensions.width20),
-                  color: Colors.amber[300],
-                  image: const DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage('assets/images/food3.jpg'),
-                  ),
-                ),
-                
-                    ),
-                    //text container
-                    Expanded(
-                      child: Container(
-                      height: Dimensions.ListViewTextsize,
+                   child:   FutureBuilder<List<ProductsModel>>(
+            future: controller.getallProduct(),
+            builder: (context, product) {
+              if (product.connectionState == ConnectionState.done) {
+                if (product.hasData) {
+                  return ListView.builder(
+                         physics: const NeverScrollableScrollPhysics(),
+                         shrinkWrap: true,
+                       itemCount: product.data!.length,
+                       itemBuilder: (context, index) {
+                         return GestureDetector(
+                           onTap: () {
+                                   //Get.toNamed(RouteHelper.getfoodDetail(index),);
+                           },
+                           child: Container(
+                             margin: EdgeInsets.only(left: Dimensions.width20, right: Dimensions.width20, bottom:  Dimensions.height10),
+                             child: Row(
+                               children: [
+                                 Container(
+                                   width: Dimensions.ListViewImgSize,
+                                   height: Dimensions.ListViewImgSize,
+                                   decoration: BoxDecoration(
+                                     borderRadius: BorderRadius.circular(Dimensions.width20),
+                                     color: Colors.amber[300],),
+                                     child: Image.network(
+                                  product.data![index].image,
+                                  fit: BoxFit.cover,
+                                ),
+                                   
+                                   
+                      ),
+                      //text container
+                      Expanded(
+                        child: Container(
+                        height: Dimensions.ListViewTextsize,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topRight :Radius.circular( Dimensions.radius30),
+                            bottomRight: Radius.circular( Dimensions.radius30),
+                          ),
+                          color: const Color.fromARGB(26, 179, 173, 173),
+                        ),
+                        child: Padding(
+                          padding:EdgeInsets.only(left: Dimensions.width10,right: Dimensions.width10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              BigText(text: product.data![index].name,size:15,),
+                              SizedBox(height: Dimensions.height10,),
+                              SamllText(text: product.data![index].description),
+                              SizedBox(height: Dimensions.height10,),
+                         
+                               Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                      BigText(text: " \$ ${product.data![index].price} ", color: Colors.redAccent, ),
+                                      Container(
+                      padding: EdgeInsets.only(top:Dimensions.height10, bottom: Dimensions.height10, left: Dimensions.width10,right: Dimensions.width10, ),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topRight :Radius.circular( Dimensions.radius30),
-                          bottomRight: Radius.circular( Dimensions.radius30),
-                        ),
-                        color: const Color.fromARGB(255, 220, 240, 240),
+                        borderRadius: BorderRadius.circular(Dimensions.radius20),
+                        color: Colors.white,
+                                   
+                       ),
+                       child: Row(
+                        children: [
+                           GestureDetector(
+                            onTap: (){
+                              //cartController.addItem(_cartList[index].product!,-1)
+                              
+                            },
+                            child: const Icon(Icons.remove,color: AppColors.signcolor,)),
+                          SizedBox(width: Dimensions.width10/2,),
+                          BigText(text:"0" ),//_cartList[index].quantity.toString()),
+                          SizedBox(width: Dimensions.width10/2,),
+                          GestureDetector(
+                            onTap: (){
+                              cart.addProduct(product.data![index]);
+                              
+                              
+                            },
+                            
+                            
+                            child: const Icon(Icons.add,color: AppColors.signcolor,)),
+                        ],
+                       ),
+                                   
+                                     ),
+                                   
+                                      ],
+                                    )
+                            ],
+                         
+                          ),
+                           ),
                       ),
-                      child: Padding(
-                        padding:EdgeInsets.only(left: Dimensions.width10,right: Dimensions.width10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            BigText(text: "Stores",size:15,),
-                            SizedBox(height: Dimensions.height10,),
-                            SamllText(text: "it is good order today!!"),
-                            SizedBox(height: Dimensions.height10,),
-      
-                             Row(
-                    children: [
-                      Wrap(
-                        children: List.generate(5, (index) => const Icon(Icons.star,color: AppColors.mainColor,size: 10,)),
+                           
                       ),
-                       SizedBox(width: Dimensions.height10,),
-                      SamllText(text: "4.5"),
-                      SizedBox(width: Dimensions.height10,),
-                      SamllText(text: '1287'),
-                      SizedBox(width: Dimensions.height10,),
-                      SamllText(text: "comments"),
-                    ],
-                  ),
-                  SizedBox(height: Dimensions.height10,),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  
-                  children: [
-                  IconAndTextWidget(icon: Icons.circle_sharp, text: "Normal",  iconColor:AppColors.iconcolor1),
-                  IconAndTextWidget(icon: Icons.location_on, text: "1.5km",  iconColor:AppColors.mainColor),
-                  IconAndTextWidget(icon: Icons.access_time_rounded, text: "Normal",  iconColor:AppColors.iconcolor2),
-      
-                  ],
-                )
-                          ],
-      
-                        ),
-                         ),
-                    ),
-        
-                    ),
-                  ],
-                ),
-              ),
-      );
-           },
-           ),
+                                     ],
+                                   ),
+                                 ),
+                         );
+                              },
+                              );
+                              } else if (product.hasError) {
+                  return Center(child: Text(product.error.toString()));
+                } else {
+                  return const Center(child: Text("Something went wrong"));
+                }
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }),
                   
                 ),
+
+
+
               ],
+
             ) ,
             ),
           
         ],
-      ),
-    bottomNavigationBar: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-       Container(
-        padding: EdgeInsets.only(
-          left: Dimensions.width20*2.5,
-          right: Dimensions.width20*2.5,
-          top: Dimensions.height10,
-          bottom: Dimensions.height10,
-
-        ),
-        
-         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              AppIcon(iconColor: Colors.white,  backgroundColor: AppColors.mainColor, icon: Icons.remove, size: Dimensions.iconSize25, ),
-              SizedBox(width: Dimensions.width10,),
-               BigText(text: "\$12.88 "+" X "+" 0 ",color: AppColors.mainBlackcolor,size: Dimensions.font16,),
-               SizedBox(width: Dimensions.width10,),
-              AppIcon(iconColor: Colors.white,  backgroundColor: AppColors.mainColor, size: Dimensions.iconSize25, icon: Icons.add,),
-             
-       
-            ],
-          ),
-       ),
-
-        Container(
-        height: Dimensions.bottomHeightbar,
-        padding: EdgeInsets.only(top: Dimensions.height30 , bottom: Dimensions.height30, left: Dimensions.width30, right: Dimensions.width30 ),
-        decoration: BoxDecoration(
-          color:AppColors.buttonBackgroundcolor,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(Dimensions.radius20*2),
-            topRight: Radius.circular(Dimensions.radius20*2),
-
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              padding: EdgeInsets.only(top:Dimensions.height15, bottom: Dimensions.height15, left: Dimensions.width20,right: Dimensions.width20, ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(Dimensions.radius20),
-                color: Colors.white,
-
-               ),
-               child: const Icon(
-                Icons.favorite,
-                color: AppColors.mainColor,
-               ),
-            ),
-            Container(
-              padding: EdgeInsets.only(top:Dimensions.height15, bottom: Dimensions.height15, left: Dimensions.width20,right: Dimensions.width20, ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(Dimensions.radius20),
-                color: AppColors.mainColor
-              ),
-              
-              child:BigText(text: "\$10|Add to cart", color: Colors.white,),
-            )
-          ],
-
-        ),
-
-
-      ),
-
-      ],
-      ),
+      ), 
     
-    );
+  );
 
   }
 }

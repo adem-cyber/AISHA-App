@@ -1,14 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/home/home_page.dart';
+
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../../../utils/colors.dart';
 import '../../../utils/dimensions.dart';
 import '../../../widgets/app_icon.dart';
-import '../../../widgets/big_text.dart';
-import '../../../widgets/small_text.dart';
-import '../../home/main_food_page.dart';
 import 'food_shop_body.dart';
 
 class  FoodShopPage extends StatefulWidget {
@@ -38,7 +35,7 @@ class _FoodShopPageState extends State< FoodShopPage> {
                 children: [
                  GestureDetector(
                  onTap: () {
-                  Get.to(() => const MainFoodPage());
+                  Get.to(()=>const HomePage());
                     },
                    child: const AppIcon(
                                 icon: Icons.arrow_back_ios_new_sharp,
@@ -60,7 +57,7 @@ class _FoodShopPageState extends State< FoodShopPage> {
                   color: AppColors.mainColor, 
 
                 ),
-                child:  Icon(Icons.search,color:Colors.white, size: Dimensions.iconSize25 ),
+                child:  Icon(Icons.search,color:Colors.white, size: Dimensions.iconSize24 ),
               )
               ),
             ],

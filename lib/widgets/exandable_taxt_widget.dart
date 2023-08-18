@@ -37,7 +37,7 @@ class _ExandableTextState extends State<ExandableText> {
     return Container(
       child: secondHalf.isEmpty?SamllText(size: Dimensions.font16,color: AppColors.paracolor,text: firstHalf): Column(
         children: [
-          SamllText(height:1.8,color: AppColors.paracolor,size: Dimensions.font16, text: hiddenText?(firstHalf + "..."):(firstHalf+secondHalf)),
+          SamllText(height:1.8,color: AppColors.paracolor,size: Dimensions.font16, text: hiddenText?("$firstHalf..."):(firstHalf+secondHalf)),
 
         InkWell(
           onTap: () {

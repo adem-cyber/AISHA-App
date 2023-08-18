@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/controller/cart_controller.dart';
-import 'package:flutter_application_1/controller/product_controller.dart';
-import 'package:flutter_application_1/model/product_model.dart';
+
 import 'package:flutter_application_1/pages/home/main_food_page.dart';
 import 'package:flutter_application_1/utils/colors.dart';
 import 'package:flutter_application_1/utils/dimensions.dart';
@@ -10,19 +8,21 @@ import 'package:flutter_application_1/widgets/app_icon.dart';
 import 'package:flutter_application_1/widgets/big_text.dart';
 import 'package:flutter_application_1/widgets/exandable_taxt_widget.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 
 class FoodDetail extends StatelessWidget {
- final int pageId;
-  FoodDetail({super.key, required this.pageId});
+ 
+  const FoodDetail({super.key });
+  
+
 
   @override
   Widget build(BuildContext context) {
-    var product= Get.find<ProductController>().productList[pageId];
-    Get.find<ProductController>().initProduct(Get.find<CartController>());
+  
+    
+    
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 191, 97, 97),
       body: Stack(
         children: [
           //background image
@@ -52,19 +52,28 @@ class FoodDetail extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Get.to(()=>MainFoodPage());
+                      Get.to(()=>const MainFoodPage());
                     },
                     child:
-                      AppIcon(icon: Icons.arrow_back_ios_new_sharp)),
-                      AppIcon(icon: Icons.shopping_cart_checkout_outlined),
-                
-                
-                    
-                  
-                ],
+                      const AppIcon(icon: Icons.arrow_back_ios_new_sharp)),
+                ]
               )
-              ),
-
+             )  ,     
+                          const Stack(
+                          children: [
+                       AppIcon(icon: Icons.shopping_cart_outlined),
+                       
+                      Positioned(
+                        right: 0, top: 0,
+                        child:  AppIcon(icon: Icons.circle,size: 20,iconColor: Colors.transparent,backgroundColor: AppColors.mainColor,))
+                       
+                       
+                     
+                        
+                     
+                          ],
+                        ),
+                      
               //introduction
               Positioned(
                 left: 0,
@@ -98,11 +107,10 @@ class FoodDetail extends StatelessWidget {
         ),
         
 
-        ],
-      ),
-      bottomNavigationBar: GetBuilder<ProductController>(
-        builder: (popularproduct) {
-          return Container(
+        
+      
+      
+           Container(
             height: Dimensions.bottomHeightbar,
             padding: EdgeInsets.only(top: Dimensions.height30 , bottom: Dimensions.height30, left: Dimensions.width20, right: Dimensions.width20 ),
             decoration: BoxDecoration(
@@ -127,16 +135,16 @@ class FoodDetail extends StatelessWidget {
                     children: [
                        GestureDetector(
                         onTap: (){
-                          popularproduct.setQuantity(false);
+                  //        popularproduct.setQuantity(false);
                           
                         },
                         child: const Icon(Icons.remove,color: AppColors.signcolor,)),
                       SizedBox(width: Dimensions.width10/2,),
-                      BigText(text: popularproduct.quantity.toString()),
+                 BigText(text: "habil"),
                       SizedBox(width: Dimensions.width10/2,),
                       GestureDetector(
                         onTap: (){
-                          popularproduct.setQuantity(true);
+                //          popularproduct.setQuantity(true);
                           
                         },
                         child: const Icon(Icons.add,color: AppColors.signcolor,)),
@@ -152,19 +160,24 @@ class FoodDetail extends StatelessWidget {
                   ),
                   child: GestureDetector(
                     onTap: () {
-                      popularproduct.addItem(product);  
+                     // popularproduct.addItem(product);  
                       
                     },
-                    child: BigText(text: "\$10|Add to cart", color: Colors.white,)),
+                    child: BigText(text: "\$ 10 |Add to cart", color: Colors.white,)),
                 )
               ],
 
             ),
 
 
-          );
-        }
-      ),
+          ),
+          ]
+          ),
     );
+        }
+        
+      
+    
   }
-}
+
+

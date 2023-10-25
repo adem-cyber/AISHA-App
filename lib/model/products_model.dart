@@ -6,6 +6,7 @@ class ProductsModel {
   final String description;
   final String price;
   final String image;
+    int quantity;
 
   ProductsModel({
     this.id,
@@ -13,6 +14,7 @@ class ProductsModel {
     required this.description,
     required this.price,
     required this.image,
+    this.quantity = 1
 
   });
   toJson() {

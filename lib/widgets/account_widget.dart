@@ -4,36 +4,56 @@ import 'package:flutter_application_1/widgets/app_icon.dart';
 import 'package:flutter_application_1/widgets/big_text.dart';
 
 class AccountWidget extends StatelessWidget {
-  AppIcon appIcon;
-  BigText bigText;
-   AccountWidget({super.key, required this.appIcon, required this.bigText, required String initialValue});
+  final AppIcon appIcon;
+  final BigText bigText;
+  final bool obscureText;
+  final VoidCallback? onPressed;
+
+  const AccountWidget({
+    Key? key,
+    required this.appIcon,
+    this.onPressed,
+    required this.bigText,
+    required String initialValue,
+    this.obscureText = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
-      padding: EdgeInsets.only(
-        left: Dimensions.width10,
-        top: Dimensions.width10,
-        bottom: Dimensions.width10,
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10, // Adjust the horizontal padding
+        vertical: 5.0,   // Adjust the vertical padding
       ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow:[
-        BoxShadow(
-          blurRadius: 1,
-          offset: const Offset(0, 5),
-          color: Colors.grey.withOpacity(0.2),
-          ),
-        ]
-           ),
-      child: Row(
-        children: [
-          appIcon,
-          SizedBox(width: Dimensions.width20,),
-          bigText,
-        ],
+      child: Container(
+        //alignment: AlignmentDirectional,
+        width: Dimensions.screenWidth / 1.16,
+        height: Dimensions.screenHeight / 30,
+        decoration: BoxDecoration(
+          //color: const Color.fromARGB(255, 237, 237, 237),
+          //borderRadius: BorderRadius.circular(60.0),
+          //boxShadow: [
+          //  BoxShadow(
+           //   color: Colors.grey.withOpacity(0.9),
+          //  ),
+        //  ],
+        ),
+        child: Row(
+          children: [
+            appIcon,
+            SizedBox(width: Dimensions.width10),
+            Expanded(
+              child: bigText,
+            ),
+            if (onPressed != null)
+              IconButton(
+                onPressed: onPressed,
+                icon: const Icon(Icons.edit),
+                color: Colors.blue,
+              ),
+          ],
+        ),
       ),
     );
-  } 
+  }
 }

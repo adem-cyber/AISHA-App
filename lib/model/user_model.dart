@@ -6,21 +6,27 @@ class UserModel {
   final String name;
   final String email;
   final String phone;
-  final String password;
+ 
+  late final String? address;
+  String verificationId;
+  
 
   UserModel({
     this.id,
     required this.name,
     required this.email,
     required this.phone,
-    required this.password,
+    
+    this.address,
+     this.verificationId = '',
   });
-  toJson() {
+ Map<String, dynamic>toJson() {
     return {
       "Name": name,
       "Email": email,
       "Phone": phone,
-      "password": password,
+      
+      "Address": address,
     };
   }
 
@@ -32,7 +38,13 @@ class UserModel {
         name: data["Name"], 
         email: data["Email"], 
         phone: data["Phone"], 
-        password: data["password"],
+        address: data["Address"],
         );
   }
+   void updateAddress(String newAddress) {
+    // Update the address with the new location string
+    address = newAddress;
+  }
+  
+
 }

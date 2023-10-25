@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/account/sign_up.dart';
+import 'package:flutter_application_1/pages/vendor/account/sign_in_vendor.dart';
+import 'package:flutter_application_1/utils/colors.dart';
 import 'package:get/get.dart';
 
-import '../../utils/colors.dart';
 import '../../utils/dimensions.dart';
 import '../../widgets/big_text.dart';
 import '../account/sign_in.dart';
@@ -14,8 +15,15 @@ class FrontPage extends StatelessWidget {
   Widget build(BuildContext context) {
    
   
-    return Scaffold(
-        backgroundColor: AppColors.mainColor,
+    return  Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+           image: AssetImage('assets/images/login.png'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(children: [
@@ -35,18 +43,18 @@ class FrontPage extends StatelessWidget {
               Container(
                child: Center(
                       child: BigText(
-                        text: "Welcome To IIYISHA",
+                        text: "Welcome To IIYISHHA",
                         size: Dimensions.font20 + Dimensions.font20 / 4,
-                        color: Colors.white,
+                        color: AppColors.mainColor,
                       ),
                     ),
               ),
               SizedBox(
-                height: Dimensions.screenHeight * 0.35,
+                height: Dimensions.screenHeight * 0.3,
               ),
               
               Row(
-                // mainAxisAlignment: MainAxisAlignment.
+              
                 
                 children: [
                    SizedBox(
@@ -54,20 +62,20 @@ class FrontPage extends StatelessWidget {
               ),
                   GestureDetector(
                      onTap: () {
-                      Get.to(()=>const SignInPage());
+                      Get.to(()  => SignInPage());
                     },
                     child: Container(
                       width: Dimensions.screenWidth / 3,
                       height: Dimensions.screenHeight / 15,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(Dimensions.radius30),
-                        color: Colors.white,
+                        color: AppColors.button2,
                       ),
                       child: Center(
                         child: BigText(
-                          text: "Sign In",
+                          text: "Customer",
                           size: Dimensions.font20 + Dimensions.font20 / 4,
-                          color: Colors.black,
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -78,20 +86,20 @@ class FrontPage extends StatelessWidget {
                  
                   GestureDetector(
                     onTap: () {
-                      Get.to(()=>const SignUpPage());
+                      Get.to(()  => SignInPageVendor());
                     },
                     child: Container(
                       width: Dimensions.screenWidth / 3,
                       height: Dimensions.screenHeight / 15,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(Dimensions.radius30),
-                        color: Colors.black,
+                        color: AppColors.button3,
                       ),
                       child: Center(
                         child: BigText(
                           
                              
-                          text: "Sign Up",
+                          text: "Vendor",
                           size: Dimensions.font20 + Dimensions.font20 / 4,
                           color: Colors.white,
                         ), 
@@ -109,7 +117,7 @@ class FrontPage extends StatelessWidget {
             )
             
             
-            );
-            
+            ),
+      );
   }
 }

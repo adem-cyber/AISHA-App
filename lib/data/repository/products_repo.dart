@@ -16,12 +16,12 @@ class ProductsRepo extends GetxController{
     return productsData;
   }
    Future<List<ProductsModel>> getallProduct() async{
-    final snapshot = await _db.collection("Products").doc("O3GQHrJjEh4yrICO8O7g").collection("Food").get(); 
+    final snapshot = await _db.collection("Products").get(); 
     final productsData =    snapshot.docs.map((e)=>ProductsModel.fromSnapshot(e)).toList();
     return productsData;
   }
 Future<List<ProductsModel>> getallProductG() async{
-    final snapshot = await _db.collection("Products").doc("O3GQHrJjEh4yrICO8O7g").collection("Grocery").get(); 
+    final snapshot = await _db.collection("Products").get(); 
     final productsData =    snapshot.docs.map((e)=>ProductsModel.fromSnapshot(e)).toList();
     return productsData;
 

@@ -13,6 +13,12 @@ class AppColors {
   static const Color titlecolor= Color(0xFFccc7c5);
   static const Color mainBlackcolor= Color.fromARGB(255, 0, 0, 0);
   static const Color yellowcolor= Color.fromARGB(255, 247, 199, 8);
+  static const Color purple=Color(0xFF22548A);
+  static const Color button1=Color(0xFF22CCF1);
+  static const Color button2=Color(0xFF22548A);
+  static const Color button3=Color(0xFFE8B83D);
+
+
 
 
 

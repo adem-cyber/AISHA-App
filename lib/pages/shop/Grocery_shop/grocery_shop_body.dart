@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data/repository/store_repo_vendor.dart';
 
-import 'package:flutter_application_1/data/repository/store_repo.dart';
-import 'package:flutter_application_1/model/store_model.dart';
-
+import 'package:flutter_application_1/pages/vendor/home/store_model_vendor.dart';
 
 import 'package:flutter_application_1/utils/colors.dart';
 import 'package:flutter_application_1/utils/dimensions.dart';
@@ -15,31 +13,31 @@ import 'package:get/get.dart';
 import 'grocery_store_list.dart';
 
 class GroceryShopBody extends StatefulWidget {
-  const GroceryShopBody({super.key});
+  const GroceryShopBody({Key? key, required this.Store}) : super(key: key);
 
+  final String Store;
   @override
   State<GroceryShopBody> createState() => _GroceryShopBodyState();
 }
 
-
-
 class _GroceryShopBodyState extends State<GroceryShopBody> {
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(StoreRepo());
+    final controller = Get.put(StoreRepoVendor());
 
-    return Column(
+    return SingleChildScrollView(
+        child: Column(
       children: [
         //FOOD STORE text
         SizedBox(
-          height: Dimensions.height30,
+          height: Dimensions.height10,
         ),
         Container(
           margin: EdgeInsets.only(left: Dimensions.width30),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              BigText(text: "Grocery"),
+              BigText(text: widget.Store),
               SizedBox(
                 width: Dimensions.width10,
               ),
@@ -62,33 +60,46 @@ class _GroceryShopBodyState extends State<GroceryShopBody> {
         ),
 
         //list of food and images
-        FutureBuilder<List<StoreModel>>(
-            future: controller.getAllStoreG(),
+        FutureBuilder<List<StoreModelVendor>>(
+            future: controller.getStoreType(widget.Store),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
                   return ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount:snapshot.data!.length ,
+                    itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
-                      return Container(
-                        margin: EdgeInsets.only(
-                            left: Dimensions.width20,
-                            right: Dimensions.width20,
-                            bottom: Dimensions.height10),
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(() => const GroceryStoreList());
-                              },
-                              child: Container(
-                                width: Dimensions.ListViewImgSize,
-                                height: Dimensions.ListViewImgSize,
+                      return GestureDetector(
+                        onTap: () {
+                          Get.to(
+                            () => const GroceryStoreList(),
+                            arguments: {
+                              'name': snapshot.data![index].name,
+                              'description': snapshot.data![index].description,
+                              'location': snapshot.data![index].location,
+                              'storeid': snapshot.data![index].storeid,
+                              'email': snapshot.data![index].email,
+                              'phone': snapshot.data![index].phone,
+                              'image': snapshot.data![index].image,
+                              'vendorid': snapshot.data![index].vendorid,
+                              'type': snapshot.data![index].type,
+                            },
+                          );
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              left: Dimensions.width20,
+                              right: Dimensions.width20,
+                              bottom: Dimensions.height10),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: Dimensions.ListViewImgSize / 1.2,
+                                height: Dimensions.ListViewImgSize / 1.3,
                                 decoration: BoxDecoration(
                                   borderRadius:
-                                      BorderRadius.circular(Dimensions.width20),
+                                      BorderRadius.circular(Dimensions.width10),
                                   color: Colors.amber[300],
                                 ),
                                 child: Image.network(
@@ -96,94 +107,85 @@ class _GroceryShopBodyState extends State<GroceryShopBody> {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                            ),
-                            //text container
-                            Expanded(
-                              child: Container(
-                                height: Dimensions.ListViewTextsize,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                    topRight:
-                                        Radius.circular(Dimensions.radius30),
-                                    bottomRight:
-                                        Radius.circular(Dimensions.radius30),
+
+                              //text container
+                              Expanded(
+                                child: Container(
+                                  height: Dimensions.ListViewTextsize / 1.2,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(
+                                          Dimensions.radius30 / 1.5),
+                                      bottomRight: Radius.circular(
+                                          Dimensions.radius30 / 1.5),
+                                    ),
+                                    color: const Color.fromARGB(
+                                        255, 220, 240, 240),
                                   ),
-                                  color: const Color.fromARGB(255, 220, 240, 240),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                      left: Dimensions.width10,
-                                      right: Dimensions.width10),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      BigText(
-                                        text: snapshot.data![index].name,
-                                        size: 15,
-                                      ),
-                                      SizedBox(
-                                        height: Dimensions.height10,
-                                      ),
-                                      SamllText(
-                                          text: snapshot.data![index].location),
-                                      SizedBox(
-                                        height: Dimensions.height10,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Wrap(
-                                            children: List.generate(
-                                                5,
-                                                (index) => const Icon(
-                                                      Icons.star,
-                                                      color:
-                                                          AppColors.mainColor,
-                                                      size: 10,
-                                                    )),
-                                          ),
-                                          SizedBox(
-                                            width: Dimensions.height10,
-                                          ),
-                                          SamllText(text: "4.5"),
-                                          SizedBox(
-                                            width: Dimensions.height10,
-                                          ),
-                                          SamllText(text: '1287'),
-                                          SizedBox(
-                                            width: Dimensions.height10,
-                                          ),
-                                          SamllText(text: "comments"),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: Dimensions.height10,
-                                      ),
-                                      const Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          IconAndTextWidget(
-                                              icon: Icons.circle_sharp,
-                                              text: "Normal",
-                                              iconColor: AppColors.iconcolor1),
-                                          IconAndTextWidget(
-                                              icon: Icons.location_on,
-                                              text: "1.5km",
-                                              iconColor: AppColors.mainColor),
-                                          IconAndTextWidget(
-                                              icon: Icons.access_time_rounded,
-                                              text: "Normal",
-                                              iconColor: AppColors.iconcolor2),
-                                        ],
-                                      )
-                                    ],
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        left: Dimensions.width10,
+                                        right: Dimensions.width10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        BigText(
+                                          text: snapshot.data![index].name,
+                                          size: 17,
+                                        ),
+                                        SizedBox(
+                                          height: Dimensions.height20,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Wrap(
+                                              children: List.generate(
+                                                  5,
+                                                  (index) => const Icon(
+                                                        Icons.star,
+                                                        color: AppColors
+                                                            .yellowcolor,
+                                                        size: 10,
+                                                      )),
+                                            ),
+                                            SizedBox(
+                                              width: Dimensions.height20,
+                                            ),
+                                            SamllText(text: "4.5"),
+                                            SizedBox(
+                                              width: Dimensions.height10,
+                                            ),
+                                            SamllText(text: '1287'),
+                                            SizedBox(
+                                              width: Dimensions.height10,
+                                            ),
+                                            SamllText(text: "comments"),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: Dimensions.height10,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            IconAndTextWidget(
+                                                icon: Icons.location_on,
+                                                text: snapshot
+                                                    .data![index].location,
+                                                iconColor: AppColors.mainColor),
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -200,6 +202,6 @@ class _GroceryShopBodyState extends State<GroceryShopBody> {
               }
             }),
       ],
-    );
+    ));
   }
 }

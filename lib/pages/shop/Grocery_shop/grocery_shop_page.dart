@@ -1,4 +1,7 @@
+import 'package:anim_search_bar/anim_search_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/base/search_page.dart';
 import 'package:flutter_application_1/pages/home/home_page.dart';
 
 import 'package:get/get.dart';
@@ -9,14 +12,37 @@ import '../../../widgets/app_icon.dart';
 import 'grocery_shop_body.dart';
 
 class  GroceryShopPage extends StatefulWidget {
-  const  GroceryShopPage({super.key});
-
+  const GroceryShopPage({Key? key, required this.Store}) : super(key: key);
+final String Store;
   @override
   State< GroceryShopPage> createState() => _GroceryShopPageState();
 }
 
  
 class _GroceryShopPageState extends State< GroceryShopPage> {
+  final TextEditingController _searchController = TextEditingController();
+  List<DocumentSnapshot> searchResults = [];
+
+  
+
+ void _handleSearch(String searchText) async {
+  print('Search Text: $searchText'); // Debugging
+
+  try {
+   
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+     /*    Get.to(
+      () => SearchResultsPage(searchResults:_searchController.text)
+      );*/
+        builder: (context) => SearchResultsPage(searchResults: searchText),
+      ),
+    );
+  } catch (e) {
+    print('Error performing search: $e');
+  }
+}
   @override
   Widget build(BuildContext context) {
     
@@ -26,7 +52,7 @@ class _GroceryShopPageState extends State< GroceryShopPage> {
            Container(
           
         child: Container(
-          margin:  EdgeInsets.only(top:Dimensions.height45,bottom: Dimensions.height15),
+          margin:  EdgeInsets.only(top:Dimensions.height30,bottom: Dimensions.height10),
           padding:  EdgeInsets.only(left: Dimensions.width20, right: Dimensions.width20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,27 +74,43 @@ class _GroceryShopPageState extends State< GroceryShopPage> {
                 ],
               ),
               
-              Center(
-              child:Container(
-                width: Dimensions.height45,
-                height: Dimensions.height45,
-                decoration:BoxDecoration(
-                  borderRadius: BorderRadius.circular(Dimensions.radius15),
-                  color: AppColors.mainColor, 
-
-                ),
-                child:  Icon(Icons.search,color:Colors.white, size: Dimensions.iconSize24 ),
-              )
+              Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(Dimensions.radius15),
+                    ),
+                    child: AnimSearchBar(
+                      width: Dimensions.height45 * 5,
+                      textController: _searchController,
+                      rtl: true,
+                      animationDurationInMilli: 374,
+                      color: AppColors.mainColor,
+                      searchIconColor: Colors.white,
+                      boxShadow: true,
+                     onSuffixTap: () {
+                       
+                              
+                                  _handleSearch(_searchController.text);
+                        
+                      },
+                      helpText: "Search...",
+                      onSubmitted: (String query) {
+                         
+                        _handleSearch(query);
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-           ),
+  
+           Expanded( 
+            child: SingleChildScrollView(
            
-          const Expanded(child: SingleChildScrollView(
-            child:GroceryShopBody()
+            child:GroceryShopBody(Store: widget.Store),
+            )
            ,)
-          ),
+          
         ],
       ),
     

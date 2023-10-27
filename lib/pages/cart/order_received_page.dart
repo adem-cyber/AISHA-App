@@ -58,6 +58,7 @@ class OrderList extends State<OrderReceivedPage> {
         stream: FirebaseFirestore.instance
             .collection('orders')
             .where("Vendorid", isEqualTo: userData.vendorid)
+            .orderBy('timestamp', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -93,11 +94,10 @@ class OrderList extends State<OrderReceivedPage> {
                   children: <Widget>[
                      
                     ListTile(
-                      title: Text('Order ID: ${order.id}'),
+                      title: Text('Date: ${_formatTimestamp(orderData['timestamp'])}'),
                       subtitle:
-                          Text('Total Amount: ZMK--${orderData['totalAmount']}'),
-                      trailing: Text(
-                          'Date: ${_formatTimestamp(orderData['timestamp'])}'),
+                          Text('Order ID: ${order.id}'),
+                      trailing: Text('Total Amount: ZMK--${orderData['totalAmount']}' ),
                     ),
                    
                     Padding(
@@ -154,12 +154,19 @@ class OrderList extends State<OrderReceivedPage> {
     );
   }
 
-  String _formatTimestamp(Timestamp timestamp) {
+ 
+  String _formatTimestamp(Timestamp? timestamp) {
+    if (timestamp == null) {
+      return 'Unknown Date';
+    }
     final dateTime = timestamp.toDate();
     final formattedDate =
-        "${dateTime.year}-${dateTime.month}-${dateTime.day}";
+        "${_twoDigits(dateTime.year)}-${_twoDigits(dateTime.month)}-${_twoDigits(dateTime.day)} ${_twoDigits(dateTime.hour)}:${_twoDigits(dateTime.minute)}";
     return formattedDate;
   }
+
+  String _twoDigits(int n) => n.toString().padLeft(2, "0");
+
 
  Future<void> _deleteOrder(String orderId) async {
     try {

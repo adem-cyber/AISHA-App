@@ -50,20 +50,20 @@ class _HomePageState extends State<HomePagevendor> {
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.plus_circle),
         title: ("Home"),
-        activeColorPrimary:  AppColors.button3,
+        activeColorPrimary:  AppColors.button1,
         inactiveColorPrimary: const Color.fromARGB(255, 255, 255, 255),
       ),
       
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.archivebox),
         title: ("Cart"),
-        activeColorPrimary: AppColors.button3,
+        activeColorPrimary: AppColors.button1,
         inactiveColorPrimary: const Color.fromARGB(255, 255, 255, 255),
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.person_alt_circle),
         title: ("User"),
-        activeColorPrimary: AppColors.button3,
+        activeColorPrimary: AppColors.button1,
         inactiveColorPrimary: const Color.fromARGB(255, 255, 255, 255),
       ),
     ];

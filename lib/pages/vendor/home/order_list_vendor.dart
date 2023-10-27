@@ -15,7 +15,11 @@ const OrderListVendor({super.key, required this.storeid});
     //  ),);
     return StreamBuilder<QuerySnapshot>(
       
-      stream: FirebaseFirestore.instance.collection('orders').where("Storeid", isEqualTo: storeid).snapshots(),
+      stream: FirebaseFirestore.instance
+      .collection('orders')
+      .where("Storeid", isEqualTo: storeid)
+    
+      .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
@@ -47,11 +51,11 @@ const OrderListVendor({super.key, required this.storeid});
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   ListTile(
-                    title: Text('Order ID: ${order.id}'),
+                    title: Text('Date: ${_formatTimestamp(orderData['timestamp'])}'),
                     subtitle:
-                        Text('Total Amount: ZMK-${orderData['totalAmount']}'),
-                    trailing: Text(
-                        'Date: ${_formatTimestamp(orderData['timestamp'])}'),
+                        Text('Order ID: ${order.id}'),
+                    trailing: Text('Total Amount: ZMK-${orderData['totalAmount']}'
+                        ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),

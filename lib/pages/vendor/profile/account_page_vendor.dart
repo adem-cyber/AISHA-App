@@ -66,8 +66,8 @@ class AccountPageStatevendor extends State<AccountPagevendor> {
                     
                     AppIcon(
                       icon: Icons.person_4_outlined,
-                      backgroundColor: Colors.white,
-                      iconColor: Colors.black,
+                      backgroundColor: AppColors.button1,
+                      iconColor: Colors.white,
                       iconsize: Dimensions.height20 + Dimensions.height30,
                       size: Dimensions.height15 * 6,
                     ),
@@ -183,7 +183,7 @@ class AccountPageStatevendor extends State<AccountPagevendor> {
                                       size: Dimensions.height10 * 2),
                                   bigText: BigText(
                                     text: userData.vendorid,
-                                    size: 16,
+                                    size: 14,
                                   )),
                               SizedBox(
                                 height: Dimensions.height20,

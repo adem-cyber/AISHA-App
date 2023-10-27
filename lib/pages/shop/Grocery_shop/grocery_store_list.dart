@@ -98,6 +98,7 @@ vendorid=arguments['vendorid']??'';
     storeid = storeid;
     email = email;
     phone = phone;
+    vendorid=vendorid;
     type=type;
   });
 

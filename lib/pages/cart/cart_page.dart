@@ -160,7 +160,7 @@ class _CartPageState extends State<CartPage> {
               ElevatedButton(
                 onPressed: () {
                    
-              Get.to(()=> OrderPage(vendorid: widget.vendorid,name:widget.name,));
+              Get.to(()=> OrderPage(vendorid: widget.vendorid,name:widget.name));
                 },
                 child: const Text('Checkout'),
               ),

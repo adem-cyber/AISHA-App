@@ -28,8 +28,9 @@ class OrderList extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection('orders')
+          .collection('ordersUser')
           .where("userPhone", isEqualTo: userPhone)
+          .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -116,7 +117,7 @@ class OrderCard extends StatelessWidget {
               
               Center(
                   child: Text(
-                    'Total Amount: ZMK- $totalAmount \n Delivery&Service: 12 ',
+                    'Total Amount: ZMK- $totalAmount \n Delivery&Service: ZMK- 12 ',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.green,

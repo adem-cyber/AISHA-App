@@ -165,6 +165,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                             'phone': snapshot.data![index].phone,
                             'image':snapshot.data![index].image,
                             'type':snapshot.data![index].type,
+                           'vendorid':snapshot.data![index].vendorid,
                           },
                     
                         );

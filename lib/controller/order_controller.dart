@@ -13,10 +13,9 @@ class OrderController extends GetxController {
   final CartController _cartController = Get.find();
 String _holdstoreid = ''; 
 final sender =Get.put(StoreRepoVendor());
-  @override
-
-
-   void setStore(String storeid) {
+  
+  
+  void setStore(String storeid) {
     _holdstoreid = storeid;
     
   }
@@ -93,7 +92,24 @@ final sender =Get.put(StoreRepoVendor());
         'totalAmount': totalAmount,
         'timestamp': FieldValue.serverTimestamp(),
       });
+      final collectionReference = FirebaseFirestore.instance.collection('ordersUser');
+        collectionReference.add({
+        'userId': user.uid,
+        'userName': user.displayName ?? '', // Include user's name
+        'userPhone': user.phoneNumber ?? '', // Include user's phone number
+        'items': orderItems,
+        'Storeid': getStore(),
+        'Vendorid': vendorid,
+        'StoreName': name,
+        'serviceCharge': serviceCharge, // Add service charge
+        'deliveryCharge': deliveryCharge, // Add delivery charge
+        'totalAmount': totalAmount,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
     }
+  
+
+    
   });
 
   // Show a success message or perform other actions as needed
@@ -103,12 +119,5 @@ final sender =Get.put(StoreRepoVendor());
   // Clear the cart after placing the order
   _cartController.clearCart();
 }
- Stream<QuerySnapshot> getOrdersSortedByTime() {
-    // Sort the orders by the "timestamp" field in ascending order (oldest first)
-    return FirebaseFirestore.instance
-        .collection('orders')
-        .orderBy('timestamp', descending: false)
-        .snapshots();
-  }
-
+ 
 }

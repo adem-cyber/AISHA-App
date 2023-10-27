@@ -59,11 +59,12 @@ class _MainFoodPageState extends State<MainFoodPage> {
                       ),
                       Row(
                         children: [
-                          SamllText(
-                            text: "Monze",
-                            color: Colors.black54,
+                          BigText(
+                            text: "Iiyishha",
+                            color: AppColors.button3,
+                            size: 13,
                           ),
-                          const Icon(Icons.arrow_drop_down_rounded)
+                        
                         ],
                       ),
                     ],

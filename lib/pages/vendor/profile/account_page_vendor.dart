@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/repository/auth_repo.dart';
-import 'package:flutter_application_1/pages/vendor/home/home_page_vendor.dart';
-import 'package:flutter_application_1/pages/vendor/home/main_vendor_body.dart';
-import 'package:flutter_application_1/pages/vendor/home/store_list.dart';
 import 'package:flutter_application_1/pages/vendor/profile_controller_vendor.dart';
 import 'package:flutter_application_1/pages/vendor/user_model_vendor.dart';
 import 'package:flutter_application_1/pages/vendor/profile/edit_profile_page.dart';

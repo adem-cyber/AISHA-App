@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_1/pages/front/front_page.dart';
 import 'package:flutter_application_1/pages/home/home_page.dart';
-import 'package:flutter_application_1/pages/vendor/account/sign_in_vendor.dart';
+
 import 'package:flutter_application_1/pages/vendor/execptions/signup_failure.dart';
 import 'package:flutter_application_1/pages/vendor/home/home_page_vendor.dart';
 import 'package:flutter_application_1/pages/vendor/otp_screen_vendor.dart';

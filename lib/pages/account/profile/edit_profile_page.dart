@@ -23,7 +23,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.initState();
     _nameController.text = widget.currentUser.name;
     _phoneController.text = widget.currentUser.phone;
-    _emailController.text = widget.currentUser.email;
+    //_emailController.text = widget.currentUser.email;
     _addressController.text = widget.currentUser.address ?? "";
   }
 
@@ -40,13 +40,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextField(controller: _nameController, decoration: const InputDecoration(labelText: 'Name')),
+            TextField(
+                controller: _nameController,
+                decoration: const InputDecoration(labelText: 'Name')),
             const SizedBox(height: 16.0),
-            TextField(controller: _phoneController, decoration: const InputDecoration(labelText: 'Phone')),
+            TextField(
+                controller: _phoneController,
+                decoration: const InputDecoration(labelText: 'Phone')),
             const SizedBox(height: 16.0),
-            TextField(controller: _emailController, decoration: const InputDecoration(labelText: 'Email')),
-            const SizedBox(height: 16.0),
-            TextField(controller: _addressController, decoration: const InputDecoration(labelText: 'Address')),
+            TextField(
+                controller: _addressController,
+                decoration: const InputDecoration(labelText: 'Address')),
             const SizedBox(height: 16.0),
             Center(
               child: ElevatedButton(
@@ -56,18 +60,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     id: widget.currentUser.id,
                     name: _nameController.text,
                     phone: _phoneController.text,
-                    email: _emailController.text,
-                  // Keep the existing password
+                    // email: _emailController.text,
+                    // Keep the existing password
                     address: _addressController.text,
                   );
 
-                  bool updateSuccess = await controller.updateUserData(updatedUser);
+                  bool updateSuccess =
+                      await controller.updateUserData(updatedUser);
 
                   if (updateSuccess) {
-                    Get.snackbar('Profile Updated', 'Your profile has been updated successfully!');
-                   Navigator.pop(context, updatedUser);
+                    Get.snackbar('Profile Updated',
+                        'Your profile has been updated successfully!');
+                    Navigator.pop(context, updatedUser);
                   } else {
-                    Get.snackbar('Error', 'Failed to update profile. Please try again.');
+                    Get.snackbar(
+                        'Error', 'Failed to update profile. Please try again.');
                   }
                 },
                 child: const Text('Save Changes'),
@@ -86,7 +93,5 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _emailController.dispose();
     _addressController.dispose();
     super.dispose();
-    
   }
-  
 }

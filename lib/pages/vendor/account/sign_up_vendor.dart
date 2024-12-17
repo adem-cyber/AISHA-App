@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/base/save.dart';
+import 'package:flutter_application_1/data/repository/authentication_repo_vendor.dart';
 import 'package:flutter_application_1/pages/vendor/account/app_text_field.dart';
 import 'package:flutter_application_1/pages/vendor/account/sign_in_vendor.dart';
 import 'package:flutter_application_1/pages/vendor/user_model_vendor.dart';
@@ -103,39 +105,8 @@ class SignUpPageVendor extends StatelessWidget {
                 SizedBox(
                   height: Dimensions.height20,
                 ),
-                AppTextField(
-                  formKey,
-                  textController: controller.email,
-                  hintText: "Email",
-                  icon: Icons.email,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Email is required";
-                    }
-                    if (!GetUtils.isEmail(value)) {
-                      return "Enter a valid email address";
-                    }
-                    return null;
-                  },
-                ),
                 SizedBox(
                   height: Dimensions.height20,
-                ),
-                AppTextField(
-                  formKey,
-                  textController: controller.password,
-                  hintText: "Password",
-                  obscureText: true,
-                  icon: Icons.lock,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Password is required";
-                    }
-                    if (value.length < 6) {
-                      return "Password must be at least 6 characters";
-                    }
-                    return null;
-                  },
                 ),
                 SizedBox(
                   height: Dimensions.height20,
@@ -143,17 +114,17 @@ class SignUpPageVendor extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () async {
                     if (formKey.currentState!.validate()) {
-                      final email = controller.email.text.trim();
+                      // final email = controller.phone.text.trim();
                       final phone = controller.phone.text.trim();
-                      
+
                       Get.dialog(
-                              const Center(child: CircularProgressIndicator()),
-                              barrierDismissible: false,
-                            );
+                        const Center(child: CircularProgressIndicator()),
+                        barrierDismissible: false,
+                      );
 
                       // Check if a user with the given email or phone already exists
                       final userExists = await SignUpControllerVendor.instance
-                          .userExistsByEmailOrPhone(email, phone);
+                          .userExistsByEmailOrPhone(phone);
 
                       if (userExists) {
                         const snackBar = SnackBar(
@@ -169,17 +140,17 @@ class SignUpPageVendor extends StatelessWidget {
                         print("User with this email or phone already exists.");
                       } else {
                         // User doesn't exist, proceed to create the new user
-                        final user = UserModelVendor(
-                          email: email,
-                          password: controller.password.text.trim(),
-                          name: controller.name.text.trim(),
-                          phone: phone,
-                          vendorid: vendorid,
-                        );
-                        SignUpControllerVendor.instance.createUser(user);
+                        SaveData.storeUserData({
+                          'Name': controller.name.text.trim(),
+                          'Phone': phone,
+                          'VendorID': vendorid,
+                        });
+
+                        await AuthenticationRepoVendor.instance
+                            .phoneAuthentication(phone);
+                        //SignUpControllerVendor.instance.createUser(user);
                       }
                       Get.back();
-                          
                     }
                   },
                   style: ElevatedButton.styleFrom(

@@ -13,62 +13,60 @@ class CartController extends GetxController {
     }
     return total;
   }
-void addProduct(ProductsModelVendor product) {
-  final index = cartItems.indexWhere((item) => item.id == product.id);
-  if (index != -1) {
-    updateQuantity(index, cartItems[index].quantity + 1);
-    print("Product added: ${product.name}, New quantity: ${cartItems[index].quantity}");
-  } else {
-    product.quantity = 1;
-    cartItems.add(product);
-    print("Product added: ${product.name}, New quantity: 1");
-  }
 
-  Get.snackbar(
-    "Product Added",
-    "You have added ${product.name} to the cart",
-    snackPosition: SnackPosition.TOP,
-    backgroundColor: const Color.fromARGB(206, 246, 246, 13),
-    duration: const Duration(seconds: 1),
-  );
-  update();
-}
-
-void removeItem(ProductsModelVendor product) {
-  final index = cartItems.indexWhere((item) => item.id == product.id);
-  if (index != -1) {
-    if (cartItems[index].quantity > 1) {
-      updateQuantity(index, cartItems[index].quantity - 1);
-      
-      print("Product removed: ${product.name}, New quantity: ${cartItems[index].quantity}");
+  void addProduct(ProductsModelVendor product) {
+    final index = cartItems.indexWhere((item) => item.id == product.id);
+    if (index != -1) {
+      updateQuantity(index, cartItems[index].quantity + 1);
+      print(
+          "Product added: ${product.name}, New quantity: ${cartItems[index].quantity}");
     } else {
-      cartItems.removeAt(index);
-      print("Product removed: ${product.name}, Quantity: 0");
+      product.quantity = 1;
+      cartItems.add(product);
+      print("Product added: ${product.name}, New quantity: 1");
     }
 
     Get.snackbar(
-      "Remove product",
-      "You have removed ${product.name} from the cart",
+      "Product Added",
+      "You have added ${product.name} to the cart",
+      colorText: Colors.white70,
       snackPosition: SnackPosition.TOP,
-      backgroundColor: Colors.redAccent,
-      duration: const Duration(seconds: 1),
+      backgroundColor: Colors.blue,
+      duration: const Duration(milliseconds: 700),
     );
-    update();
   }
-}
 
-  
+  void removeItem(ProductsModelVendor product) {
+    final index = cartItems.indexWhere((item) => item.id == product.id);
+    if (index != -1) {
+      if (cartItems[index].quantity > 1) {
+        updateQuantity(index, cartItems[index].quantity - 1);
+        print(
+            "Product removed: ${product.name}, New quantity: ${cartItems[index].quantity}");
+      } else {
+        cartItems.removeAt(index);
+        print("Product removed: ${product.name}, Quantity: 0");
+      }
+
+      Get.snackbar(
+        "Remove product",
+        "You have removed ${product.name} from the cart",
+        colorText: Colors.white70,
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.purple,
+        duration: const Duration(milliseconds: 700),
+      );
+    }
+  }
 
   void updateQuantity(int index, int newQuantity) {
     if (index >= 0 && index < cartItems.length) {
-      cartItems[index].quantity = newQuantity;
+      cartItems[index] = cartItems[index].copyWith(quantity: newQuantity);
     }
-    update();
   }
 
   int getQuantity(ProductsModelVendor product) {
     final index = cartItems.indexWhere((item) => item.id == product.id);
-     update();
     return index != -1 ? cartItems[index].quantity : 0;
   }
 
@@ -77,12 +75,10 @@ void removeItem(ProductsModelVendor product) {
     for (var item in cartItems) {
       quantity += item.quantity;
     }
-     update();
     return quantity;
   }
 
   void clearCart() {
     cartItems.clear();
-    update();
   }
 }

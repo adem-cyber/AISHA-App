@@ -8,17 +8,16 @@ import 'package:flutter_application_1/utils/dimensions.dart';
 import 'package:flutter_application_1/widgets/account_widget.dart';
 import 'package:flutter_application_1/widgets/app_icon.dart';
 import 'package:flutter_application_1/widgets/big_text.dart';
-import 'package:flutter_application_1/widgets/user_account_widget.dart';
 import 'package:get/get.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
 
   @override
-  _AccountPageState createState() => _AccountPageState();
+  AccountPageState createState() => AccountPageState();
 }
 
-class _AccountPageState extends State<AccountPage> {
+class AccountPageState extends State<AccountPage> {
   late UserModel userData; // Store the user data in the state
 
   @override
@@ -49,10 +48,18 @@ class _AccountPageState extends State<AccountPage> {
           size: 24,
           color: Colors.white,
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout), // Add logout icon here
+            onPressed: () {
+              AuthenticationRepo.instance.logout();
+            },
+          ),
+        ],
       ),
       body: Container(
         width: double.maxFinite,
-        margin: EdgeInsets.only(top: Dimensions.height30),
+        margin: EdgeInsets.only(top: Dimensions.height20),
         child: FutureBuilder(
           future: controller.getUserData(),
           builder: (context, snapshot) {
@@ -63,54 +70,62 @@ class _AccountPageState extends State<AccountPage> {
                   children: [
                     //profile icon
                     AppIcon(
-                      icon: Icons.person_4_sharp,
-                      backgroundColor: AppColors.button3,
+                      icon: Icons.person_4_outlined,
+                      backgroundColor: Colors.orange,
                       iconColor: Colors.white,
                       iconsize: Dimensions.height20 + Dimensions.height30,
-                      size: Dimensions.height15 * 7,
+                      size: Dimensions.height15 * 6,
                     ),
                     SizedBox(
-                      height: Dimensions.height20,
+                      height: Dimensions.height10 * 1.5,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        ElevatedButton(
-                          onPressed: () async {
-                            final updatedUser = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    EditProfilePage(currentUser: userData),
-                              ),
-                            );
-
-                            if (updatedUser != null) {
-                              // Update the UI with the updated user data
-                              setState(() {
-                                userData = updatedUser;
-                              });
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(Dimensions.radius30),
+                        Column(
+                          children: [
+                            BigText(
+                              text: userData.name.toUpperCase(),
+                              size: Dimensions.font16 + Dimensions.font16 / 8,
+                              color: Colors.black,
                             ),
-                            minimumSize: Size(Dimensions.screenWidth / 2,
-                                Dimensions.screenHeight / 20),
-                          ),
-                          child: BigText(
-                            text: "Edit Profile",
-                            size: Dimensions.font16 + Dimensions.font16 / 8,
-                            color: AppColors.button3,
-                          ),
+                            SizedBox(
+                              height: Dimensions.height10,
+                            ),
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.to(() => EditProfilePage(
+                                          currentUser: userData,
+                                        ));
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'Edit',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.blueGrey),
+                                      ),
+                                      // Optional spacing between text and icon
+                                      Icon(
+                                        Icons
+                                            .edit_outlined, // Use a different edit icon
+                                        color: Colors.black26,
+                                        size: 14,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
                         ),
                       ],
                     ),
                     SizedBox(
-                      height: Dimensions.height30,
+                      height: Dimensions.height30 * 2,
                     ),
                     Expanded(
                       child: SingleChildScrollView(
@@ -118,81 +133,44 @@ class _AccountPageState extends State<AccountPage> {
                           child: Column(
                             children: [
                               //name
-                              AccountWidgett(
-                                  initialValue: userData.name,
-                                  appIcon: AppIcon(
-                                      icon: Icons.person_4_sharp,
-                                      backgroundColor: Colors.blue,
-                                      iconColor: Colors.white,
-                                      iconsize: Dimensions.height10 * 2,
-                                      size: Dimensions.height10 * 5),
-                                  bigText: BigText(
-                                    text: userData.name,
-                                    size: 20,
-                                  )),
-                              SizedBox(
-                                height: Dimensions.height20,
-                              ),
 
                               //phone
-                              AccountWidgett(
+                              AccountWidget(
                                   initialValue: userData.phone,
                                   appIcon: AppIcon(
                                       icon: Icons.phone,
                                       backgroundColor: Colors.green,
                                       iconColor: Colors.white,
-                                      iconsize: Dimensions.height10 * 2,
-                                      size: Dimensions.height10 * 5),
+                                      iconsize: Dimensions.height10 * 1.5,
+                                      size: Dimensions.height10 * 2),
                                   bigText: BigText(
                                     text: userData.phone,
-                                    size: 20,
+                                    size: 16,
                                   )),
                               SizedBox(
                                 height: Dimensions.height20,
                               ),
                               //email
-                              AccountWidgett(
-                                  initialValue: userData.email,
-                                  appIcon: AppIcon(
-                                      icon: Icons.email,
-                                      backgroundColor: Colors.black12,
-                                      iconColor: Colors.white,
-                                      iconsize: Dimensions.height10 * 2,
-                                      size: Dimensions.height10 * 5),
-                                  bigText: BigText(
-                                    text: userData.email,
-                                    size: 20,
-                                  )),
-                              SizedBox(
-                                height: Dimensions.height20,
-                              ),
-                              AccountWidgett(
-                                initialValue: userData.address != null &&
-                                        userData.address!.isNotEmpty
+
+                              //address
+                              AccountWidget(
+                                initialValue: userData.address != null
                                     ? userData.address.toString()
                                     : "Fill address in Edit profile",
                                 appIcon: AppIcon(
                                   icon: Icons.location_on_outlined,
                                   backgroundColor: Colors.black,
                                   iconColor: Colors.white,
-                                  iconsize: Dimensions.height10 * 2,
-                                  size: Dimensions.height10 * 5,
+                                  iconsize: Dimensions.height10 * 1.5,
+                                  size: Dimensions.height10 * 2,
                                 ),
                                 bigText: BigText(
-                                  text: userData.address != null &&
-                                          userData.address!.isNotEmpty
+                                  text: userData.address != null
                                       ? userData.address.toString()
                                       : "Fill address in Edit profile",
-                                  size: 20,
+                                  size: 16,
                                 ),
                               ),
-
-                              //address
-
-                              SizedBox(
-                                height: Dimensions.height20,
-                              ),
-
                               SizedBox(
                                 height: Dimensions.height20,
                               ),
@@ -206,7 +184,7 @@ class _AccountPageState extends State<AccountPage> {
                                   AuthenticationRepo.instance.logout();
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
+                                  backgroundColor: Colors.orange,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(
                                         Dimensions.radius30),
@@ -218,7 +196,7 @@ class _AccountPageState extends State<AccountPage> {
                                   text: "Logout",
                                   size:
                                       Dimensions.font16 + Dimensions.font16 / 8,
-                                  color: AppColors.button3,
+                                  color: Colors.white,
                                 ),
                               ),
                               SizedBox(

@@ -3,30 +3,26 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class UserModelVendor {
   final String? id;
   final String name;
-  final String email;
+  // final String email;
   final String phone;
-  final String password;
+
   final String vendorid;
   late final String? address;
- 
 
   UserModelVendor({
     this.id,
     required this.name,
-    required this.email,
+    //  required this.email,
     required this.phone,
-    required this.password,
     required this.vendorid,
     this.address,
-   
   });
 
   Map<String, dynamic> toJson() {
     return {
       "Name": name,
-      "Email": email,
+      //  "Email": email,
       "Phone": phone,
-      "password": password,
       "Address": address,
       "VendorID": vendorid,
     };
@@ -38,9 +34,8 @@ class UserModelVendor {
     return UserModelVendor(
       id: document.id,
       name: data["Name"],
-      email: data["Email"],
+      // email: data["Email"],
       phone: data["Phone"],
-      password: data["password"],
       address: data["Address"],
       vendorid: data["VendorID"],
     );

@@ -57,6 +57,7 @@ class OrderList extends StatelessWidget {
     );
   }
 }
+
 class OrderCard extends StatelessWidget {
   final QueryDocumentSnapshot order;
 
@@ -67,7 +68,8 @@ class OrderCard extends StatelessWidget {
     final orderData = order.data() as Map<String, dynamic>;
     final items = orderData['items'] as List<dynamic>;
 
-    double totalAmount = double.tryParse(orderData['totalAmount'].toString()) ?? 0.0;
+    double totalAmount =
+        double.tryParse(orderData['totalAmount'].toString()) ?? 0.0;
 
     return Card(
       elevation: 3,
@@ -84,7 +86,6 @@ class OrderCard extends StatelessWidget {
                   'Date: ${_formatTimestamp(orderData['timestamp'])}',
                   style: TextStyle(fontStyle: FontStyle.italic),
                 ),
-                
               ],
             ),
           ),
@@ -97,7 +98,8 @@ class OrderCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: items.map((item) {
                 final product = item as Map<String, dynamic>;
-                final itemName = product['name'] as String? ?? 'Item Name Not Provided';
+                final itemName =
+                    product['name'] as String? ?? 'Item Name Not Provided';
                 final itemQuantity = product['quantity'];
                 final itemDescription = product['description'];
                 final itemPrice = product['price'];
@@ -113,18 +115,28 @@ class OrderCard extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: 
-              
-              Center(
-                  child: Text(
-                    'Total Amount: ZMK- $totalAmount \n Delivery&Service: ZMK- 12 ',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    ),
+            child: Column(
+              mainAxisAlignment:
+                  MainAxisAlignment.center, // Center the children vertically
+              children: [
+                ParagraphText(
+                  text:
+                      "If the service you requested does not get a response in a timely manner, call us on this phone and let us know ☎+260975390547",
+                  fontSize: 12,
+                  color: Colors.grey, // Custom color
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Total Amount: ZMK- $totalAmount + 12 ZMK (Delivery) ',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green,
                   ),
                 ),
-            
+              ],
+            ),
           ),
           const Divider(),
         ],
@@ -143,4 +155,33 @@ class OrderCard extends StatelessWidget {
   }
 
   String _twoDigits(int n) => n.toString().padLeft(2, "0");
+}
+
+class ParagraphText extends StatelessWidget {
+  final String text;
+  final double fontSize;
+  final int maxLines; // Add maxLines property
+  final Color color;
+
+  ParagraphText({
+    required this.text,
+    this.fontSize = 16.0,
+    this.maxLines = 3, // Set default maxLines
+    this.color = Colors.black, // Set default text color
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontSize: fontSize,
+        color: color,
+      ),
+      textAlign: TextAlign.center, // Center align the text
+      maxLines: maxLines, // Set the maxLines property
+      overflow:
+          TextOverflow.ellipsis, // Handle overflow with ellipsis if needed
+    );
+  }
 }

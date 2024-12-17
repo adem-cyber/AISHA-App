@@ -19,25 +19,21 @@ class _MainFoodPageState extends State<MainFoodPage> {
   final TextEditingController _searchController = TextEditingController();
   List<DocumentSnapshot> searchResults = [];
 
-  
+  void _handleSearch(String searchText) async {
+    print('Search Text: $searchText'); // Debugging
 
- void _handleSearch(String searchText) async {
-  print('Search Text: $searchText'); // Debugging
-
-  try {
-   
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-     
-        builder: (context) => SearchResultsPage(searchResults: searchText),
-      ),
-    );
-  } catch (e) {
-    print('Error performing search: $e');
+    try {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SearchResultsPage(searchResults: searchText),
+        ),
+      );
+    } catch (e) {
+      print('Error performing search: $e');
+    }
   }
-}
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,8 +42,10 @@ class _MainFoodPageState extends State<MainFoodPage> {
         children: [
           Container(
             child: Container(
-              margin: EdgeInsets.only(top: Dimensions.height20, bottom: Dimensions.height10),
-              padding: EdgeInsets.only(left: Dimensions.width20, right: Dimensions.width20),
+              margin: EdgeInsets.only(
+                  top: Dimensions.height20, bottom: Dimensions.height10),
+              padding: EdgeInsets.only(
+                  left: Dimensions.width20, right: Dimensions.width20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -64,7 +62,6 @@ class _MainFoodPageState extends State<MainFoodPage> {
                             color: AppColors.button3,
                             size: 13,
                           ),
-                        
                         ],
                       ),
                     ],
@@ -81,15 +78,11 @@ class _MainFoodPageState extends State<MainFoodPage> {
                       color: AppColors.mainColor,
                       searchIconColor: Colors.white,
                       boxShadow: true,
-                     onSuffixTap: () {
-                       
-                              
-                                  _handleSearch(_searchController.text);
-                        
+                      onSuffixTap: () {
+                        _handleSearch(_searchController.text);
                       },
                       helpText: "Search...",
                       onSubmitted: (String query) {
-                         
                         _handleSearch(query);
                       },
                     ),
@@ -98,13 +91,11 @@ class _MainFoodPageState extends State<MainFoodPage> {
               ),
             ),
           ),
-  
           const Expanded(
-  child: SingleChildScrollView(
-    child: FoodPageBody(),
-  ),
-)
-
+            child: SingleChildScrollView(
+              child: FoodPageBody(),
+            ),
+          )
         ],
       ),
     );

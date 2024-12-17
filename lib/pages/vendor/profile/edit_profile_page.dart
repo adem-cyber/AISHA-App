@@ -19,7 +19,6 @@ class EditProfilePagevendor extends StatefulWidget {
 class _EditProfilePageVendorState extends State<EditProfilePagevendor> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
 
   @override
@@ -27,7 +26,6 @@ class _EditProfilePageVendorState extends State<EditProfilePagevendor> {
     super.initState();
     _nameController.text = widget.currentUser.name;
     _phoneController.text = widget.currentUser.phone;
-    _emailController.text = widget.currentUser.email;
     _addressController.text = widget.currentUser.address ?? "";
   }
 
@@ -48,56 +46,46 @@ class _EditProfilePageVendorState extends State<EditProfilePagevendor> {
                 controller: _nameController,
                 decoration: const InputDecoration(labelText: 'Name')),
             const SizedBox(height: 16.0),
-          
-            TextField(
-                controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email')),
-            const SizedBox(height: 16.0),
             TextField(
                 controller: _addressController,
                 decoration: const InputDecoration(labelText: 'Location')),
             const SizedBox(height: 16.0),
-           
             Center(
               child: ElevatedButton(
                 onPressed: () async {
-                
                   // Update the user's profile information using ProfileController
                   UserModelVendor updatedUser = UserModelVendor(
                     id: widget.currentUser.id,
                     name: _nameController.text,
                     phone: _phoneController.text,
-                    email: _emailController.text,
-                    password: widget.currentUser.password, // Keep the existing password
+                    // email: widget.currentUser.email,
                     address: _addressController.text,
                     vendorid: widget.currentUser.vendorid,
                   );
-                  
-if (_nameController.text.isEmpty ||
-      _emailController.text.isEmpty ||
-      _addressController.text.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Please fill out all the information.'),
-        duration: Duration(seconds: 2),
-      ),
-    );
 
-    return;
-  }
-  Get.dialog(
-    const Center(child: CircularProgressIndicator()),
-    barrierDismissible: false,
-  );
+                  if (_nameController.text.isEmpty ||
+                      _addressController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please fill out all the information.'),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+
+                    return;
+                  }
+                  Get.dialog(
+                    const Center(child: CircularProgressIndicator()),
+                    barrierDismissible: false,
+                  );
                   bool updateSuccess =
                       await controller.updateUserData(updatedUser);
 
                   if (updateSuccess) {
-                     //Navigator.pop(context, updatedUser);
-Get.to(()=>HomePagevendor());
+                    //Navigator.pop(context, updatedUser);
+                    Get.to(() => HomePagevendor());
                     Get.snackbar('Profile Updated',
                         'Your profile has been updated successfully!');
-                   
                   } else {
                     Get.snackbar(
                         'Error', 'Failed to update profile. Please try again.');
@@ -116,7 +104,7 @@ Get.to(()=>HomePagevendor());
   void dispose() {
     _nameController.dispose();
     _phoneController.dispose();
-    _emailController.dispose();
+
     _addressController.dispose();
     super.dispose();
   }

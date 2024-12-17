@@ -1,6 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/base/save.dart';
+import 'package:flutter_application_1/data/repository/auth_repo.dart';
 import 'package:flutter_application_1/pages/account/sign_in.dart';
+import 'package:flutter_application_1/utils/colors.dart';
 import 'package:get/get.dart';
 
 import '../../controller/signup_controller.dart';
@@ -10,17 +13,15 @@ import '../../widgets/big_text.dart';
 import 'app_text_field.dart';
 
 class SignUpPage extends StatelessWidget {
-  
   SignUpPage({Key? key}) : super(key: key);
 
   final SignUpController controller = Get.put(SignUpController());
   final formKey = GlobalKey<FormState>();
-  
-late final TextEditingController nameController = TextEditingController();
-late final TextEditingController phoneController = TextEditingController();
-late final TextEditingController emailController = TextEditingController();
-late final TextEditingController passwordController = TextEditingController();
 
+  late final TextEditingController nameController = TextEditingController();
+  late final TextEditingController phoneController = TextEditingController();
+  late final TextEditingController emailController = TextEditingController();
+  late final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,6 @@ late final TextEditingController passwordController = TextEditingController();
         ),
       ),
       child: Scaffold(
-        
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -80,94 +80,127 @@ late final TextEditingController passwordController = TextEditingController();
                 SizedBox(
                   height: Dimensions.screenHeight * 0.02,
                 ),
-                AppTextField(
-                  formKey,
-                  textController: controller.name,
-                  hintText: "Name",
-                  icon: Icons.person,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please enter your name";
-                    }
-                    return null;
-                  },
+                SizedBox(
+                  width: 350,
+                  child: TextFormField(
+                    controller: nameController,
+                    style: const TextStyle(fontSize: 16.0, color: Colors.black),
+                    decoration: InputDecoration(
+                      labelText: 'Name',
+                      hintText: 'John',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        borderSide:
+                            const BorderSide(color: AppColors.mainColor),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        borderSide: const BorderSide(
+                            color: AppColors.mainColor, width: 1.0),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 16.0, horizontal: 16.0),
+                      prefixIcon: const Icon(Icons.person_2_outlined,
+                          color: AppColors.mainColor),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please Enter your phone number';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
                 SizedBox(
                   height: Dimensions.height20,
                 ),
-                AppTextField(
-                  formKey,
-                  textController: controller.phone,
-                  hintText: "(+260)Phone",
-                  icon: Icons.phone,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Phone is required";
-                    }
-                    return null;
-                  },
+                SizedBox(
+                  width: 350,
+                  child: TextFormField(
+                    controller: phoneController,
+                    style: const TextStyle(fontSize: 16.0, color: Colors.black),
+                    decoration: InputDecoration(
+                      labelText: 'Phone',
+                      hintText: '912345678',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        borderSide:
+                            const BorderSide(color: AppColors.mainColor),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        borderSide: const BorderSide(
+                            color: AppColors.mainColor, width: 1.0),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 16.0, horizontal: 16.0),
+                      prefixIcon: const Icon(Icons.phone_outlined,
+                          color: AppColors.mainColor),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty || value[0] == 0) {
+                        return 'Please Enter your phone number';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
                 SizedBox(
                   height: Dimensions.height20,
                 ),
-                AppTextField(
-                  formKey,
-                  textController: controller.email,
-                  hintText: "Email",
-                  icon: Icons.email,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Email is required";
-                    }
-                    if (!GetUtils.isEmail(value)) {
-                      return "Enter a valid email address";
-                    }
-                    return null;
-                  },
-                ),
-                
                 SizedBox(
                   height: Dimensions.height20,
                 ),
                 ElevatedButton(
                   onPressed: () async {
                     if (formKey.currentState!.validate()) {
-                      
-                      
-                      final email = controller.email.text.trim();
-                      final phone = controller.phone.text.trim(); 
-                      
-                      
+                      // final email = controller.phone.text.trim();
+                      String phone = '+251' + phoneController.text.trim();
+                      print(phone);
+                      Get.dialog(
+                        const Center(child: CircularProgressIndicator()),
+                        barrierDismissible: false,
+                      );
 
                       // Check if a user with the given email or phone already exists
                       final userExists = await SignUpController.instance
-                          .userExistsByEmailOrPhone(email, phone);
+                          .userExistsByEmailOrPhone(phone);
 
                       if (userExists) {
                         const snackBar = SnackBar(
                           content: Text(
-                              'User with this email or phone already exists try logging in.'),
+                              'User with this phone already exists try logging in.'),
                           backgroundColor:
                               Colors.red, // Customize the background color
                           duration: Duration(
                               seconds:
-                                  6), // Set the duration to display the SnackBar
+                                  3), // Set the duration to display the SnackBar
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        print("User with this email or phone already exists.");
+                      } else if (phone[4] == '0') {
+                        const snackBar = SnackBar(
+                          content: Text('Please your number properly'),
+                          backgroundColor:
+                              Colors.red, // Customize the background color
+                          duration: Duration(
+                              seconds:
+                                  3), // Set the duration to display the SnackBar
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         print("User with this email or phone already exists.");
                       } else {
-                        
-                        Get.dialog(
-                              const Center(child: CircularProgressIndicator()),
-                              barrierDismissible: false,);
-                        final user = UserModel(
-                          email: email,
-                          
-                          name: controller.name.text.trim(),
-                          phone: phone,
-                        );
-                        SignUpController.instance.createUser(user);
+                        // User doesn't exist, proceed to create the new user
+                        SaveData.storeUserData({
+                          'Name': nameController.text.trim(),
+                          'Phone': phone,
+                        });
+
+                        await AuthenticationRepo.instance
+                            .phoneAuthentication(phone);
+                        //SignUpControllerVendor.instance.createUser(user);
                       }
+                      Get.back();
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -199,7 +232,7 @@ late final TextEditingController passwordController = TextEditingController();
                     children: [
                       TextSpan(
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => Get.to(()=> SignInPage(),
+                          ..onTap = () => Get.to(() => SignInPage(),
                               transition: Transition.fade),
                         text: " Login",
                         style: TextStyle(
@@ -218,11 +251,7 @@ late final TextEditingController passwordController = TextEditingController();
             ),
           ),
         ),
-        
       ),
     );
   }
-  
-    
-  
 }

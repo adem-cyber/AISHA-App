@@ -1,34 +1,33 @@
-import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/save.dart';
 import 'package:flutter_application_1/controller/otp_controller.dart';
-import 'package:flutter_application_1/data/repository/auth_repo.dart';
-import 'package:flutter_application_1/pages/account/sign_in.dart';
-import 'package:flutter_application_1/pages/account/sign_up_all.dart';
-import 'package:flutter_application_1/widgets/small_text.dart';
+import 'package:flutter_application_1/pages/account/sign_up.dart';
+import 'package:flutter_application_1/pages/vendor/account/sign_up_vendor.dart';
+import 'package:flutter_application_1/pages/vendor/otp_controller_vendor.dart';
 import 'package:get/get.dart';
-import 'package:otp_text_field/otp_field.dart';
-import 'package:otp_text_field/style.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:pinput/pinput.dart'; // Import Firebase Authentication
+import 'package:pinput/pinput.dart';
 
-class OTPScreen extends StatefulWidget {
-  const OTPScreen({super.key});
+class VerifyVendor extends StatefulWidget {
+  final String phone;
+  const VerifyVendor({Key? key, required this.phone}) : super(key: key);
 
   @override
-  _OTPScreenState createState() => _OTPScreenState();
+  State<VerifyVendor> createState() => _VerifyVendorState();
 }
 
-class _OTPScreenState extends State<OTPScreen> {
-  late String otp;
-  late int _remainingTime;
-  late String verificationId;
+final FirebaseAuth auth = FirebaseAuth.instance;
 
-  late Timer _timer; // Define the timer variable
+class _VerifyVendorState extends State<VerifyVendor> {
+  late String otp;
+  late String phone;
+  late String verificationId;
+  Map<String, dynamic> retrievedData = SaveData.retrieveUserData();
 
   @override
   void initState() {
     super.initState();
+    phone = widget.phone;
   }
 
   @override
@@ -129,7 +128,12 @@ class _OTPScreenState extends State<OTPScreen> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     onPressed: () async {
-                      OTPController.instance.verifyOTPlogin(otp);
+                      OTPControllerVendor.instance.verify(
+                          otp,
+                          phone,
+                          retrievedData['Name'],
+                          retrievedData['Email'],
+                          retrievedData['VendorID']);
                     },
                     child: const Text("Verify Phone Number")),
               ),
@@ -137,7 +141,7 @@ class _OTPScreenState extends State<OTPScreen> {
                 children: [
                   TextButton(
                       onPressed: () {
-                        Get.to(() => SignUpPageAll());
+                        Get.to(() => SignUpPageVendor());
                         SaveData.clearUserData();
                       },
                       child: const Text(

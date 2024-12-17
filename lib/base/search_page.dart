@@ -110,7 +110,7 @@ class SearchResultsPage extends StatelessWidget {
                                               children: List.generate(
                                                   5,
                                                   (index) => const Icon(
-                                                        Icons.star,
+                                                        Icons.search,
                                                         color:
                                                             AppColors.mainColor,
                                                         size: 10,

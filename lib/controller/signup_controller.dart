@@ -15,10 +15,9 @@ class SignUpController extends GetxController {
 
   final userRepo = Get.put(UserRepo());
 
-  Future<void> registerUser(String email, String password) async {
-    AuthenticationRepo.instance.createUserWithEmailAndPassword(email, password);
-  }
+  //final authRepo = Get.put(authRepo());
 
+/*
   Future<void> createUser(UserModel user) async {
   try {
     // Initiate phone number authentication and await OTP verification
@@ -36,38 +35,31 @@ class SignUpController extends GetxController {
     // Handle the error, e.g., show an error message to the user.
   }
 }
-
-  Future<bool> userExistsByEmailOrPhone(String email, String phone) async {
+*/
+  Future<bool> userExistsByEmailOrPhone(String phone) async {
     try {
       // Check if a user with the given email exists
-      final emailExists = await userRepo.userExistsByEmail(email);
- 
-      // Check if a user with the given phone exists
+
       final phoneExists = await userRepo.userExistsByPhone(phone);
 
-
-      return emailExists || phoneExists;
+      return phoneExists;
     } catch (error) {
-       
       print("Error while checking user existence: $error");
       return false;
     }
-   
-  } 
-
+  }
 
   Future<bool> phoneAuthentication(String phone) async {
-  try {
-    // Initiate phone number authentication
-    await AuthenticationRepo.instance.phoneAuthentication(phone);
-    
-    // Assuming OTP verification is successful
-    return true;
-  } catch (error) {
-    // OTP verification failed
-    print("Error during OTP verification: $error");
-    return false;
-  }
-}
+    try {
+      // Initiate phone number authentication
+      await AuthenticationRepo.instance.phoneAuthentication(phone);
 
+      // Assuming OTP verification is successful
+      return true;
+    } catch (error) {
+      // OTP verification failed
+      print("Error during OTP verification: $error");
+      return false;
+    }
+  }
 }

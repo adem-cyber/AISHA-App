@@ -15,9 +15,7 @@ class OrderReceivedPage extends StatefulWidget {
 class OrderList extends State<OrderReceivedPage> {
   late UserModelVendor userData = UserModelVendor(
     name: "",
-    email: "",
     phone: "",
-    password: "",
     vendorid: "",
   );
 
@@ -44,11 +42,11 @@ class OrderList extends State<OrderReceivedPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Received Orders'),
-        backgroundColor: AppColors.purple, 
-      actions: [
+        backgroundColor: AppColors.purple,
+        actions: [
           IconButton(
             onPressed: () {
-             OrderList();
+              OrderList();
             },
             icon: Icon(Icons.refresh), // You can customize the icon as needed
           ),
@@ -72,11 +70,10 @@ class OrderList extends State<OrderReceivedPage> {
               child: Text('No orders received yet.'),
             );
           }
- 
+
           final orders = snapshot.data!.docs;
 
           return ListView.builder(
-            
             itemCount: orders.length,
             itemBuilder: (context, index) {
               final order = orders[index];
@@ -88,18 +85,18 @@ class OrderList extends State<OrderReceivedPage> {
 
               return Card(
                 elevation: 3,
-                margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                     
                     ListTile(
-                      title: Text('Date: ${_formatTimestamp(orderData['timestamp'])}'),
-                      subtitle:
-                          Text('Order ID: ${order.id}'),
-                      trailing: Text('Total Amount: ZMK--${orderData['totalAmount']}' ),
+                      title: Text(
+                          'Date: ${_formatTimestamp(orderData['timestamp'])}'),
+                      subtitle: Text('Order ID: ${order.id}'),
+                      trailing: Text(
+                          'Total Amount: ZMK--${orderData['totalAmount']}'),
                     ),
-                   
                     Padding(
                       padding: const EdgeInsets.all(9.0),
                       child: storeName != null
@@ -129,10 +126,7 @@ class OrderList extends State<OrderReceivedPage> {
                             subtitle: Text(
                                 'Description:$itemDescription | Quantity: $itemQuantity \n Price: $itemPrice '),
                           );
-                          
-                        }
-                        
-                        ).toList(),
+                        }).toList(),
                       ),
                     ),
                     ListTile(
@@ -140,7 +134,7 @@ class OrderList extends State<OrderReceivedPage> {
                         icon: Icon(Icons.delete),
                         onPressed: () {
                           // Call the function to delete the order here
-                         _deleteOrder(order.id);
+                          _deleteOrder(order.id);
                         },
                       ),
                     ),
@@ -154,7 +148,6 @@ class OrderList extends State<OrderReceivedPage> {
     );
   }
 
- 
   String _formatTimestamp(Timestamp? timestamp) {
     if (timestamp == null) {
       return 'Unknown Date';
@@ -167,10 +160,12 @@ class OrderList extends State<OrderReceivedPage> {
 
   String _twoDigits(int n) => n.toString().padLeft(2, "0");
 
-
- Future<void> _deleteOrder(String orderId) async {
+  Future<void> _deleteOrder(String orderId) async {
     try {
-      await FirebaseFirestore.instance.collection('orders').doc(orderId).delete();
+      await FirebaseFirestore.instance
+          .collection('orders')
+          .doc(orderId)
+          .delete();
     } catch (e) {
       // Handle the error
       print('Error deleting order: $e');

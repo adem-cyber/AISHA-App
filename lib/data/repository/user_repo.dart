@@ -17,9 +17,8 @@ class UserRepo extends GetxController {
         "Success",
         "Your account has been created.",
         snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.green ,
-        colorText: Colors.white ,
-        
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
       );
     } catch (error) {
       print("Error while creating user: $error");
@@ -27,8 +26,8 @@ class UserRepo extends GetxController {
         "Error",
         "Something went wrong. Try again",
         snackPosition: SnackPosition.TOP,
-        backgroundColor:const Color.fromARGB(140, 255, 255, 255),
-        colorText:  const Color.fromARGB(255, 216, 9, 9).withOpacity(0.1),
+        backgroundColor: const Color.fromARGB(140, 255, 255, 255),
+        colorText: const Color.fromARGB(255, 216, 9, 9).withOpacity(0.1),
       );
     }
   }
@@ -36,10 +35,8 @@ class UserRepo extends GetxController {
   // Fetch a user's details by phone number
   Future<UserModel?> getUserDetails(String phone) async {
     try {
-      final snapshot = await _db
-          .collection("Users")
-          .where("Phone", isEqualTo: phone)
-          .get();
+      final snapshot =
+          await _db.collection("Users").where("Phone", isEqualTo: phone).get();
       if (snapshot.docs.isNotEmpty) {
         final userData = UserModel.fromSnapshot(snapshot.docs.first);
         return userData;
@@ -56,7 +53,8 @@ class UserRepo extends GetxController {
   Future<List<UserModel>> getAllUsers() async {
     try {
       final snapshot = await _db.collection("Users").get();
-      final userData = snapshot.docs.map((e) => UserModel.fromSnapshot(e)).toList();
+      final userData =
+          snapshot.docs.map((e) => UserModel.fromSnapshot(e)).toList();
       return userData;
     } catch (error) {
       print("Error while fetching all users: $error");
@@ -65,46 +63,71 @@ class UserRepo extends GetxController {
   }
 
   // Check if a user with the given email or phone exists
- Future<bool> userExistsByEmail(String email) async {
-  try {
-   final vendorsSnapshot = await _db
-        .collection("Vendors")
-        .where("Email", isEqualTo: email)
-        .get();
+  Future<bool> userExistsByEmail(String email) async {
+    try {
+      final vendorsSnapshot = await _db
+          .collection("Vendors")
+          .where("Email", isEqualTo: email)
+          .get();
 
-    final usersSnapshot = await _db
-        .collection("Users")
-        .where("Email", isEqualTo: email)
-        .get();
+      final usersSnapshot =
+          await _db.collection("Users").where("Email", isEqualTo: email).get();
 
-    // Check if email exists in either collection
-    return vendorsSnapshot.docs.isNotEmpty || usersSnapshot.docs.isNotEmpty;
-  } catch (error) {
-    print("Error while checking user existence by email: $error");
-    return false;
+      // Check if email exists in either collection
+      return vendorsSnapshot.docs.isNotEmpty || usersSnapshot.docs.isNotEmpty;
+    } catch (error) {
+      print("Error while checking user existence by email: $error");
+      return false;
+    }
   }
-}
 
 // Check if a user with the given phone exists
-Future<bool> userExistsByPhone(String phone) async {
-  try {
-    final vendorsSnapshot = await _db
-        .collection("Vendors")
-        .where("Phone", isEqualTo: phone)
-        .get();
+  Future<bool> userExistsByPhone(String phone) async {
+    try {
+      final vendorsSnapshot = await _db
+          .collection("Vendors")
+          .where("Phone", isEqualTo: phone)
+          .get();
 
-    final usersSnapshot = await _db
-        .collection("Users")
-        .where("Phone", isEqualTo: phone)
-        .get();
+      final usersSnapshot =
+          await _db.collection("Users").where("Phone", isEqualTo: phone).get();
 
-    // Check if email exists in either collection
-    return vendorsSnapshot.docs.isNotEmpty ||usersSnapshot.docs.isNotEmpty;
-  } catch (error) {
-    print("Error while checking user existence by email: $error");
-    return false;
+      // Check if email exists in either collection
+      return vendorsSnapshot.docs.isNotEmpty || usersSnapshot.docs.isNotEmpty;
+    } catch (error) {
+      print("Error while checking user existence by email: $error");
+      return false;
+    }
   }
-}
+
+  Future<bool> UserExistsByPhone(String phone) async {
+    try {
+      final usersSnapshot =
+          await _db.collection("Users").where("Phone", isEqualTo: phone).get();
+
+      // Check if email exists in either collection
+      return usersSnapshot.docs.isNotEmpty;
+    } catch (error) {
+      print("Error while checking user existence by email: $error");
+      return false;
+    }
+  }
+
+  Future<bool> vendorExistsByPhone(String phone) async {
+    try {
+      final vendorsSnapshot = await _db
+          .collection("Vendors")
+          .where("Phone", isEqualTo: phone)
+          .get();
+
+      // Check if email exists in either collection
+      return vendorsSnapshot.docs.isNotEmpty;
+    } catch (error) {
+      print("Error while checking user existence by email: $error");
+      return false;
+    }
+  }
+
   // Update user details
   Future<void> updateUserDetails(UserModel updatedUser) async {
     try {
@@ -119,7 +142,5 @@ Future<bool> userExistsByPhone(String phone) async {
       print('Error updating user data: $error');
       throw 'Error updating user data: $error';
     }
-    
   }
-
 }
